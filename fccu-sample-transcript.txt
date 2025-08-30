@@ -1,0 +1,52 @@
+FORMAN CHRISTIAN COLLEGE UNIVERSITY
+UNOFFICIAL TRANSCRIPT
+
+Student Name: Test Student
+Student ID: FC2024001
+Major: Computer Science
+
+COURSES COMPLETED:
+
+Fall 2022:
+COMP 102 C    3 Credits
+COMP 111 E    3 Credits
+UNIV 100 H    3 Credits
+WRCM 101 C    3 Credits
+
+Spring 2023:
+COMP 113 B    3 Credits
+COMP 200 B    3 Credits
+WRCM 102 I    3 Credits
+MATH 111 C    3 Credits
+
+Fall 2023:
+COMP 206 B    3 Credits
+COMP 213 B    3 Credits
+STAT 115 C    3 Credits
+CRST 152 A    3 Credits
+
+Spring 2024:
+COMP 220 A    3 Credits
+COMP 300 B    3 Credits
+CSCS 201 A    3 Credits
+SOCL 100 G    3 Credits
+
+Fall 2024:
+COMP 301 C    3 Credits
+COMP 302 C    3 Credits
+CSCS 202 B    3 Credits
+ECON 100 H    3 Credits
+
+Spring 2025:
+COMP 303 A    3 Credits
+COMP 360 A    3 Credits
+CSCS 320 B    3 Credits
+COMP 401 C    3 Credits
+
+Additional Courses:
+CSCS 100 I    3 Credits
+CSCS 367 A    3 Credits
+CSCS 460 A    3 Credits
+
+CUMULATIVE GPA: 3.2
+TOTAL CREDITS: 72

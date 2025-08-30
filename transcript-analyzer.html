@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCCU Transcript Analyzer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="course-requirements.js"></script>
+    <style>
+        .upload-area {
+            border: 2px dashed #72a6cf;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area.dragover {
+            border-color: #4f46e5;
+            background-color: #f0f9ff;
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="flex justify-start mb-4">
+                    <a href="index.html"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+                        ← Back to Main
+                    </a>
+                </div>
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">FCCU Transcript Analyzer</h1>
+                <p class="text-gray-600">Upload your transcript to see your degree progress</p>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Upload Your Transcript</h2>
+
+                <div id="uploadArea" class="upload-area rounded-lg p-8 text-center mb-4">
+                    <div class="mb-4">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
+                            viewBox="0 0 48 48">
+                            <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <p class="text-lg text-gray-600 mb-2">Drop your transcript PDF here or</p>
+                    <button id="selectFile"
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors">
+                        Select File
+                    </button>
+                    <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                </div>
+
+                <!-- Status -->
+                <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-sm font-medium text-blue-800">Smart Course Parsing Enabled</span>
+                    </div>
+                </div>
+
+                <!-- Major Selection -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Major:</label>
+                    <div class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50">
+                        <span class="text-gray-700 font-medium">Computer Science</span>
+                        <p class="text-sm text-gray-500 mt-1">Currently supporting Computer Science transcripts only.
+                            More majors coming soon!</p>
+                    </div>
+                    <input type="hidden" id="majorSelect" value="Computer Science">
+                </div>
+
+                <div class="flex gap-4">
+                    <button id="analyzeBtn"
+                        class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                        disabled>
+                        Analyze Transcript
+                    </button>
+                    <button id="resetBtn"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        Reset
+                    </button>
+                </div>
+
+
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="hidden">
+                <!-- Progress Overview -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h2 class="text-2xl font-semibold mb-4">Degree Progress</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-3xl font-bold text-green-600" id="completedCount">0</div>
+                            <div class="text-sm text-gray-600">Completed Courses</div>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                            <div class="text-3xl font-bold text-yellow-600" id="remainingCount">0</div>
+                            <div class="text-sm text-gray-600">Remaining Courses</div>
+                        </div>
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                            <div class="text-3xl font-bold text-blue-600" id="progressPercent">0%</div>
+                            <div class="text-sm text-gray-600">Progress</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-200 rounded-full h-4 mb-4">
+                        <div id="progressBar" class="progress-bar bg-blue-500 h-4 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Detailed Results -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Completed Courses -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-green-600 mb-4">✓ Completed Requirements</h3>
+                        <div id="completedCourses" class="space-y-2">
+                            <!-- Completed courses will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Remaining Courses -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-semibold text-red-600 mb-4">⚠ Remaining Requirements</h3>
+                        <div id="remainingCourses" class="space-y-2">
+                            <!-- Remaining courses will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Navigation -->
+            <div class="mt-12 text-center">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">More Tools</h3>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                        <a href="https://zainzoy.github.io/CGPA-Calculator/" target="_blank"
+                            onclick="gtag('event', 'cgpa_calculator_click', { 'event_category': 'engagement', 'event_label': 'main_link', 'page_location': 'analyzer_tools' });"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors font-medium">
+                            📊 CGPA Calculator
+                        </a>
+                        <span class="text-gray-400 hidden sm:inline">|</span>
+                        <a href="https://cgpa-calculator-lac-nine.vercel.app/" target="_blank"
+                            onclick="gtag('event', 'cgpa_calculator_click', { 'event_category': 'engagement', 'event_label': 'alternative_link', 'page_location': 'analyzer_tools' });"
+                            class="text-blue-600 hover:text-blue-800 underline text-sm">
+                            Alternative Link
+                        </a>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-3">Calculate your CGPA with our dedicated tool</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables for transcript analysis
+        let extractedCourses = [];
+        let selectedMajor = '';
+        let analysisResults = null;
+
+        // File upload handling elements
+        const uploadArea = document.getElementById('uploadArea');
+        let fileInput = document.getElementById('fileInput');
+        let selectFileBtn = document.getElementById('selectFile');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const majorSelect = document.getElementById('majorSelect');
+        const resetBtn = document.getElementById('resetBtn');
+
+        selectFileBtn.addEventListener('click', () => fileInput.click());
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        });
+
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleFileSelect() {
+            const file = fileInput.files[0];
+            if (file) {
+                uploadArea.innerHTML = `
+                    <div class="text-green-600">
+                        <svg class="mx-auto h-12 w-12 mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <p class="text-lg font-semibold">${file.name}</p>
+                        <p class="text-sm">Ready to analyze</p>
+                    </div>
+                `;
+                updateAnalyzeButton();
+            }
+        }
+
+        function updateAnalyzeButton() {
+            const hasFile = fileInput.files.length > 0;
+            analyzeBtn.disabled = !hasFile; // Only need file since major is fixed to CS
+        }
+
+        // PDF text extraction (simplified - you'd need more robust parsing)
+        async function extractTextFromPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let fullText = '';
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                fullText += pageText + ' ';
+            }
+
+            return fullText;
+        }
+
+        // Enhanced course parsing
+        async function parseCourses(text) {
+            showProgress('Parsing transcript...');
+
+            // Use the existing regex-based parsing from course-requirements.js
+            return parseTranscriptCourses(text);
+        }
+
+
+
+
+
+        // Analyze transcript
+        analyzeBtn.addEventListener('click', async () => {
+            try {
+                // Update button state
+                analyzeBtn.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Analyzing...
+                `;
+                analyzeBtn.disabled = true;
+
+                const file = fileInput.files[0];
+                selectedMajor = majorSelect.value;
+
+                // Show progress
+                showProgress('Extracting text from PDF...');
+
+                // Extract text from PDF
+                const transcriptText = await extractTextFromPDF(file);
+
+                if (!transcriptText.trim()) {
+                    throw new Error('No text found in PDF. Please ensure the PDF contains readable text.');
+                }
+
+                // Show progress
+                showProgress('Parsing courses...');
+
+                // Parse courses
+                extractedCourses = await parseCourses(transcriptText);
+
+                if (!extractedCourses || extractedCourses.length === 0) {
+                    throw new Error('No courses found in transcript. Please check the format.');
+                }
+
+                // Show progress
+                showProgress('Analyzing degree progress...');
+
+                // Analyze degree progress using the new system
+                analysisResults = analyzeDegreeProgress(extractedCourses, selectedMajor);
+
+                // Show enhanced results
+                showEnhancedResults(analysisResults);
+
+            } catch (error) {
+                console.error('Error analyzing transcript:', error);
+                alert(`Error: ${error.message}`);
+            } finally {
+                analyzeBtn.innerHTML = 'Analyze Transcript';
+                analyzeBtn.disabled = false;
+                hideProgress();
+            }
+        });
+
+        function showProgress(message) {
+            // You can add a progress indicator here
+            console.log(message);
+        }
+
+        function hideProgress() {
+            // Hide progress indicator
+        }
+
+        // Reset functionality
+        resetBtn.addEventListener('click', () => {
+            // Simple page reload to reset everything cleanly
+            window.location.reload();
+        });
+
+        function showEnhancedResults(analysis) {
+            if (!analysis || !analysis.overall) return;
+
+            const { overall, categories } = analysis;
+
+            // Update progress stats
+            document.getElementById('completedCount').textContent = overall.totalCompleted;
+            document.getElementById('remainingCount').textContent = overall.totalRequired - overall.totalCompleted;
+            document.getElementById('progressPercent').textContent = `${overall.progress}%`;
+            document.getElementById('progressBar').style.width = `${overall.progress}%`;
+
+            // Show completed courses by category
+            const completedContainer = document.getElementById('completedCourses');
+            let completedHTML = '';
+
+            Object.entries(categories).forEach(([categoryName, categoryData]) => {
+                if (categoryData.completed.length > 0) {
+                    // Calculate the required count for display
+                    let requiredCount = categoryData.required.length;
+                    if (categoryName === "Major Electives (4 courses)") {
+                        requiredCount = 4;
+                    } else if (categoryName.includes("2 required")) {
+                        requiredCount = 2;
+                    } else if (categoryName === "Religious Studies (Choose One)") {
+                        requiredCount = 1;
+                    }
+
+                    const displayName = categoryName.replace(/\(\d+\s+required\)/, `(${categoryData.completed.length}/${requiredCount})`);
+
+                    completedHTML += `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-green-700 mb-2">${displayName}</h4>
+                            ${categoryData.completed.map(course => `
+                                <div class="flex items-center justify-between p-2 bg-green-50 rounded border-l-4 border-green-400 mb-1">
+                                    <div class="flex items-center">
+                                        <span class="text-green-600 mr-2">✓</span>
+                                        <span class="font-medium">${course.code}</span>
+                                    </div>
+                                    <div class="text-sm">
+                                        ${course.grade ? `<span class="bg-green-100 px-2 py-1 rounded">${course.grade}</span>` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            });
+
+            completedContainer.innerHTML = completedHTML || '<p class="text-gray-500">No completed courses found</p>';
+
+            // Show remaining courses by category
+            const remainingContainer = document.getElementById('remainingCourses');
+            let remainingHTML = '';
+
+            Object.entries(categories).forEach(([categoryName, categoryData]) => {
+                if (categoryData.remaining.length > 0) {
+                    // Calculate the required count for display
+                    let requiredCount = categoryData.required.length;
+                    if (categoryName === "Major Electives (4 courses)") {
+                        requiredCount = 4;
+                    } else if (categoryName.includes("2 required")) {
+                        requiredCount = 2;
+                    } else if (categoryName === "Religious Studies (Choose One)") {
+                        requiredCount = 1;
+                    }
+
+                    const displayName = categoryName.replace(/\(\d+\s+required\)/, `(${categoryData.completed.length}/${requiredCount})`);
+
+                    remainingHTML += `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-red-700 mb-2">${displayName}</h4>
+                            ${categoryData.remaining.map(course => `
+                                <div class="flex items-center justify-between p-2 bg-red-50 rounded border-l-4 border-red-400 mb-1">
+                                    <div class="flex items-center">
+                                        <span class="text-red-600 mr-2">⚠</span>
+                                        <span class="font-medium">${course.code}</span>
+                                    </div>
+
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            });
+
+            remainingContainer.innerHTML = remainingHTML || '<p class="text-gray-500">All requirements completed!</p>';
+
+            // Show results section
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

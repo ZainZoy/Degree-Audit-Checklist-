@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>FCCU Degree Audit Checklists</title>
+  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <style type="text/tailwindcss">
+    :root {
+      --primary-color: #72a6cf;
+      --accent-color: #ffffff;
+      --text-color: #334155;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--primary-color) 0%, color-mix(in srgb, var(--primary-color) 80%, #ffffff) 100%);
+      min-height: 100vh;
+    }
+
+    .background-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .shape {
+      position: absolute;
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border-radius: 30%;
+      animation: float 25s infinite ease-in-out;
+    }
+
+    .shape1 {
+      width: 300px;
+      height: 300px;
+      top: -50px;
+      left: -80px;
+      transform: rotate(45deg);
+    }
+
+    .shape2 {
+      width: 400px;
+      height: 400px;
+      bottom: -100px;
+      right: -150px;
+      transform: rotate(-30deg);
+      animation-delay: 8s;
+    }
+
+    .shape3 {
+      width: 250px;
+      height: 250px;
+      top: 20%;
+      right: 5%;
+      transform: rotate(15deg);
+      animation-delay: 15s;
+    }
+
+    .shape4 {
+      width: 200px;
+      height: 200px;
+      bottom: 30%;
+      left: 10%;
+      transform: rotate(-60deg);
+      animation-delay: 20s;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(var(--tw-rotate)); }
+      33% { transform: translateY(-30px) rotate(calc(var(--tw-rotate) + 5deg)); }
+      66% { transform: translateY(15px) rotate(calc(var(--tw-rotate) - 3deg)); }
+      100% { transform: translateY(0) rotate(var(--tw-rotate)); }
+    }
+
+    .main-card {
+      transition: transform 0.3s ease;
+    }
+
+    .main-card:hover {
+      transform: scale(1.02);
+    }
+
+    /* Animated corner accents for majors container */
+    .corner-accents {
+      position: relative;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .corner-accents::before,
+    .corner-accents::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid;
+      border-color: rgba(255, 255, 255, 0.6);
+      animation: cornerPulse 2s ease-in-out infinite alternate;
+    }
+
+    .corner-accents::before {
+      top: -1px;
+      left: -1px;
+      border-right: none;
+      border-bottom: none;
+      border-top-left-radius: 1rem;
+    }
+
+    .corner-accents::after {
+      bottom: -1px;
+      right: -1px;
+      border-left: none;
+      border-top: none;
+      border-bottom-right-radius: 1rem;
+    }
+
+    .corner-accents .corner-accent-tr,
+    .corner-accents .corner-accent-bl {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid;
+      border-color: rgba(255, 255, 255, 0.6);
+      animation: cornerPulse 2s ease-in-out infinite alternate;
+      animation-delay: 1s;
+    }
+
+    .corner-accents .corner-accent-tr {
+      top: -1px;
+      right: -1px;
+      border-left: none;
+      border-bottom: none;
+      border-top-right-radius: 1rem;
+    }
+
+    .corner-accents .corner-accent-bl {
+      bottom: -1px;
+      left: -1px;
+      border-right: none;
+      border-top: none;
+      border-bottom-left-radius: 1rem;
+    }
+
+    @keyframes cornerPulse {
+      0% { 
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: scale(1);
+      }
+      100% { 
+        border-color: rgba(255, 255, 255, 0.8);
+        transform: scale(1.1);
+      }
+    }
+
+    /* Floating particles */
+    .floating-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatParticle 8s linear infinite;
+    }
+
+    .floating-particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .floating-particle:nth-child(2) { left: 30%; animation-delay: 2s; }
+    .floating-particle:nth-child(3) { left: 50%; animation-delay: 4s; }
+    .floating-particle:nth-child(4) { left: 70%; animation-delay: 6s; }
+    .floating-particle:nth-child(5) { left: 90%; animation-delay: 1s; }
+
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(100px) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(80px) scale(1);
+      }
+      90% {
+        opacity: 1;
+        transform: translateY(-80px) scale(1);
+      }
+      100% {
+        transform: translateY(-100px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .checklist-button {
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.9), rgba(51, 65, 85, 0.7));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .checklist-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent);
+      border-radius: inherit;
+      z-index: -1;
+      transition: left 0.5s ease;
+    }
+
+    .checklist-button:hover::before {
+      left: 100%;
+    }
+
+    .checklist-button:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 
+        0 15px 30px -10px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 255, 255, 0.15);
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
+      color: var(--text-color);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Ripple effect on button click */
+    .checklist-button {
+      overflow: hidden;
+    }
+
+    .checklist-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .checklist-button:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    .checklist-button:active {
+      transform: translateY(-2px) scale(1.02);
+      transition-duration: 0.1s;
+    }
+
+    .nav-button {
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.9), rgba(51, 65, 85, 0.7));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-button:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, rgba(51, 65, 85, 1), rgba(51, 65, 85, 0.9));
+    }
+
+    .page-indicator {
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.9), rgba(51, 65, 85, 0.7));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Grid layout for centering 9th item */
+    .majors-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .majors-grid.has-ninth-item {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .majors-grid.has-ninth-item .major-item:nth-child(9) {
+      grid-column: 2 / 4;
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .majors-grid,
+      .majors-grid.has-ninth-item {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+      
+      .majors-grid.has-ninth-item .major-item:nth-child(9) {
+        grid-column: 1;
+      }
+
+      .main-card:hover {
+        transform: scale(1.01);
+      }
+
+      .nav-button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .checklist-button {
+        padding: 0.875rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      /* Disable fancy effects on mobile */
+      .corner-accents::before,
+      .corner-accents::after,
+      .corner-accents .corner-accent-tr,
+      .corner-accents .corner-accent-bl,
+      .floating-particle {
+        display: none;
+      }
+
+      .checklist-button::before,
+      .checklist-button::after {
+        display: none;
+      }
+
+      .checklist-button:hover {
+        box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+        transform: translateY(-3px) scale(1.02);
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .majors-grid.has-ninth-item {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .majors-grid.has-ninth-item .major-item:nth-child(9) {
+        grid-column: 2;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .shape, .corner-accents::before, .corner-accents::after,
+      .corner-accents .corner-accent-tr, .corner-accents .corner-accent-bl,
+      .floating-particle {
+        animation: none;
+      }
+      .checklist-button, .nav-button, .main-card {
+        transition: none;
+      }
+      .main-card:hover {
+        transform: none;
+      }
+      .checklist-button:hover {
+        transform: none;
+      }
+    }
+
+    /* Color scheme classes */
+    .theme-mint {
+      --primary-color: #d3f7c3;
+      --accent-color: #ffffff;
+      --text-color: #1f2937;
+    }
+
+    .theme-blue {
+      --primary-color: #72a6cf;
+      --accent-color: #ffffff;
+      --text-color: #334155;
+    }
+
+    .theme-peach {
+      --primary-color: #e3b298;
+      --accent-color: #ffffff;
+      --text-color: #374151;
+    }
+
+    .theme-coral {
+      --primary-color: #ff9a8b;
+      --accent-color: #ffffff;
+      --text-color: #374151;
+    }
+
+    .theme-lavender {
+      --primary-color: #a8e6cf;
+      --accent-color: #ffffff;
+      --text-color: #374151;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+  <div class="relative flex size-full min-h-screen flex-col items-center justify-center overflow-hidden p-4 sm:p-6">
+    <div class="background-shapes">
+      <div class="shape shape1"></div>
+      <div class="shape shape2"></div>
+      <div class="shape shape3"></div>
+      <div class="shape shape4"></div>
+    </div>
+
+    <div
+      class="main-card relative z-10 w-full max-w-6xl rounded-3xl bg-white/30 p-4 sm:p-6 lg:p-10 text-center shadow-2xl backdrop-blur-xl border border-white/20">
+      <div class="flex items-center justify-center gap-3 mb-4 sm:mb-6">
+        <svg class="h-8 w-8 sm:h-10 sm:w-10 text-slate-700" fill="none" stroke="currentColor" stroke-width="1.5"
+          viewBox="0 0 24 24">
+          <path
+            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <div class="text-center">
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-slate-800">FCCU
+            Degree Audit</h1>
+          <p class="text-base sm:text-lg font-medium text-slate-600">Checklists</p>
+        </div>
+      </div>
+
+      <p class="mb-6 sm:mb-8 text-sm sm:text-base text-slate-600">Select your major to view the degree audit checklist
+        PDF.</p>
+
+      <!-- New Feature: Transcript Analyzer -->
+      <div class="mb-6 sm:mb-8 p-4 bg-white/20 rounded-xl border border-white/30 backdrop-blur-sm">
+        <div class="flex items-center justify-center gap-3 mb-3">
+          <svg class="h-6 w-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <h3 class="text-lg font-bold text-slate-800">New: Transcript Analysis</h3>
+        </div>
+        <p class="text-sm text-slate-600 mb-3 text-center">Upload your transcript to automatically track your degree
+          progress</p>
+        <div class="text-center">
+          <a href="transcript-analyzer.html"
+            onclick="gtag('event', 'analyze_transcript_navigate', { 'event_category': 'engagement', 'event_label': 'homepage_button', 'page_location': 'homepage' });"
+            class="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+            </svg>
+            Try Transcript Analyzer
+          </a>
+        </div>
+      </div>
+
+      <!-- Page Navigation -->
+      <div class="flex items-center justify-center gap-2 sm:gap-4 mb-4 sm:mb-6">
+        <button id="prevBtn"
+          class="nav-button flex items-center gap-1 sm:gap-2 rounded-lg px-3 sm:px-4 py-2 text-white font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+          disabled>
+          <svg class="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span class="hidden sm:inline">Previous</span>
+          <span class="sm:hidden">Prev</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <span class="page-indicator text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium"
+            id="pageIndicator">Page 1 of 3</span>
+        </div>
+
+        <button id="nextBtn"
+          class="nav-button flex items-center gap-1 sm:gap-2 rounded-lg px-3 sm:px-4 py-2 text-white font-medium shadow-lg text-sm sm:text-base">
+          <span class="hidden sm:inline">Next</span>
+          <span class="sm:hidden">Next</span>
+          <svg class="h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Majors Grid -->
+      <div id="majorsContainer" class="fade-in">
+        <div class="corner-accents">
+          <div class="corner-accent-tr"></div>
+          <div class="corner-accent-bl"></div>
+          <div class="floating-particle"></div>
+          <div class="floating-particle"></div>
+          <div class="floating-particle"></div>
+          <div class="floating-particle"></div>
+          <div class="floating-particle"></div>
+          <div class="majors-grid" id="majorsGrid">
+            <!-- Majors will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-6 sm:mt-8 text-xs text-slate-600">Each link opens the specific checklist PDF in a new tab.</p>
+
+      <!-- Additional Tools -->
+      <div class="mt-8 pt-6 border-t border-white/20">
+        <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center">Additional Academic Tools</h4>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <a href="https://zainzoy.github.io/CGPA-Calculator/" target="_blank"
+            onclick="gtag('event', 'cgpa_calculator_click', { 'event_category': 'engagement', 'event_label': 'main_link', 'page_location': 'homepage' });"
+            class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            CGPA Calculator
+          </a>
+          <a href="https://cgpa-calculator-lac-nine.vercel.app/" target="_blank"
+            onclick="gtag('event', 'cgpa_calculator_click', { 'event_category': 'engagement', 'event_label': 'alternative_link', 'page_location': 'homepage' });"
+            class="inline-flex items-center gap-2 text-green-700 hover:text-green-800 px-3 py-2 rounded-lg border border-green-300 hover:border-green-500 transition-colors text-sm">
+            Alternative Link
+          </a>
+        </div>
+        <p class="text-xs text-slate-600 mt-2 text-center">Calculate your CGPA using FCCU's grading system</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Color themes
+    const themes = ['theme-mint', 'theme-blue', 'theme-peach', 'theme-coral', 'theme-lavender']
+
+    // Apply random theme on load
+    function applyRandomTheme() {
+      const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+      document.body.className = `antialiased ${randomTheme}`;
+    }
+
+    // All majors data sorted alphabetically
+    const majors = [
+      { name: "Applied Psychology", file: "Applied-Psychology-2024-2025.pdf" },
+      { name: "Biology", file: "Biology-2024-2025.pdf" },
+      { name: "Biotechnology", file: "Biotechnology-2024-2025.pdf" },
+      { name: "Business", file: "Business-2024-2025.pdf" },
+      { name: "Chemistry", file: "Chemistry-2024-2025.pdf" },
+      { name: "Computer Science", file: "Checklist-Computer-Science-2024-2025-May.pdf" },
+      { name: "Economics", file: "Economics-2024-2025.pdf" },
+      { name: "Education", file: "Education-2024-2025.pdf" },
+      { name: "English Linguistic", file: "English-Linguistic-2024-2025.pdf" },
+      { name: "English Literature", file: "English-Literature-2024-25.pdf" },
+      { name: "Environmental Sciences", file: "Environmental-Sciences-2024-2025.pdf" },
+      { name: "Geography Human", file: "Geography-Human-2024-2025.pdf" },
+      { name: "Geography Physical", file: "Geography-Physical-2024-2025.pdf" },
+      { name: "History", file: "History-2024-2025.pdf" },
+      { name: "Mass Communication", file: "Mass-Communication-2022-2023-OCT.pdf" },
+      { name: "Mathematics", file: "Mathematics-2024-2025-New.pdf" },
+      { name: "Microbiology", file: "Microbiology-2024-2025.pdf" },
+      { name: "Philosophy", file: "Philosophy-2024-2025.pdf" },
+      { name: "Physics", file: "Physics-2024-2025.pdf" },
+      { name: "Political Science", file: "Political-Science-2024-2025-June-2025.pdf" },
+      { name: "Psychology", file: "Psychology-2024-2025.pdf" },
+      { name: "Religious Studies Christian", file: "Religious-Studies-Christian-2024-2025-April.pdf" },
+      { name: "Religious Studies Islamic", file: "Religious-Studies-Islamic-2024-2025.pdf" },
+      { name: "Sociology", file: "Sociology-2024-2025.pdf" },
+      { name: "Sociology and Cultural Studies", file: "Sociology-and-Cultural-Studies-2024-2025.pdf" },
+      { name: "Statistics", file: "Statistics-2024-2025-1.pdf" },
+      { name: "Urdu", file: "Urdu-2024-2025.pdf" }
+    ];
+
+    const itemsPerPage = 9;
+    let currentPage = 1;
+    const totalPages = Math.ceil(majors.length / itemsPerPage);
+
+    function renderMajors() {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const currentMajors = majors.slice(startIndex, endIndex);
+
+      const majorsGrid = document.getElementById('majorsGrid');
+      majorsGrid.innerHTML = '';
+
+      // Add class for 9th item centering
+      if (currentMajors.length === 9) {
+        majorsGrid.classList.add('has-ninth-item');
+      } else {
+        majorsGrid.classList.remove('has-ninth-item');
+      }
+
+      currentMajors.forEach((major, index) => {
+        const majorElement = document.createElement('a');
+        majorElement.className = 'major-item checklist-button block w-full rounded-xl px-4 py-3 text-base font-bold text-white shadow-lg';
+        majorElement.href = major.file;
+        majorElement.target = '_blank';
+        majorElement.textContent = major.name;
+        majorsGrid.appendChild(majorElement);
+      });
+
+      // Update navigation
+      document.getElementById('prevBtn').disabled = currentPage === 1;
+      document.getElementById('nextBtn').disabled = currentPage === totalPages;
+      document.getElementById('pageIndicator').textContent = `Page ${currentPage} of ${totalPages}`;
+
+      // Add fade-in animation
+      const container = document.getElementById('majorsContainer');
+      container.classList.remove('fade-in');
+      setTimeout(() => container.classList.add('fade-in'), 10);
+    }
+
+    // Navigation event listeners
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderMajors();
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderMajors();
+      }
+    });
+
+    // Initialize
+    applyRandomTheme();
+    renderMajors();
+  </script>
+</body>
+
+</html>

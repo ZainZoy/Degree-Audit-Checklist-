@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Course Analysis Fix</title>
+    <script src="course-requirements.js"></script>
+</head>
+
+<body>
+    <h1>Testing Course Analysis Fix</h1>
+    <div id="results"></div>
+
+    <script>
+        // Test transcript data based on user's output
+        const testTranscriptText = `
+        COMP 102 C 3 cr
+        COMP 111 E 3 cr
+        COMP 113 B 3 cr
+        COMP 200 B 3 cr
+        COMP 206 B 3 cr
+        COMP 213 B 3 cr
+        COMP 220 A 3 cr
+        COMP 300 B 3 cr
+        COMP 301 C 3 cr
+        COMP 302 C 3 cr
+        COMP 303 A 3 cr
+        COMP 360 A 3 cr
+        COMP 401 C 3 cr
+        MATH 111 C 3 cr
+        STAT 115 C 3 cr
+        CSCS 201 A 3 cr
+        CSCS 202 B 3 cr
+        CSCS 320 B 3 cr
+        UNIV 100 H 3 cr
+        WRCM 101 C 3 cr
+        WRCM 102 I 3 cr
+        CRST 152 A 3 cr
+        SOCL 100 G 3 cr
+        ECON 100 H 3 cr
+        CSCS 100 I 3 cr
+        CSCS 367 A 3 cr
+        CSCS 460 A 3 cr
+        `;
+
+        // Parse courses
+        const courses = parseTranscriptCourses(testTranscriptText);
+        console.log('Parsed courses:', courses);
+
+        // Analyze progress
+        const analysis = analyzeDegreeProgress(courses, 'Computer Science');
+        console.log('Analysis:', analysis);
+
+        // Display results
+        const resultsDiv = document.getElementById('results');
+        let html = '<h2>Analysis Results</h2>';
+        html += `<p><strong>Overall Progress:</strong> ${analysis.overall.totalCompleted}/${analysis.overall.totalRequired} courses completed</p>`;
+
+        Object.entries(analysis.categories).forEach(([categoryName, category]) => {
+            // Calculate the required count for display
+            let requiredCount = category.required.length;
+            if (categoryName === "Major Electives (4 courses, 12 credits)") {
+                requiredCount = 4;
+            } else if (categoryName.includes("2 required")) {
+                requiredCount = 2;
+            } else if (categoryName === "Religious Studies (Choose One)") {
+                requiredCount = 1;
+            }
+
+            const displayName = categoryName.replace(/\(\d+\s+required\)/, `(${category.completed.length}/${requiredCount})`);
+            html += `<h3>${displayName} (${category.progress}% complete)</h3>`;
+
+            if (category.completed.length > 0) {
+                html += '<h4>✓ Completed Courses:</h4><ul>';
+                category.completed.forEach(course => {
+                    html += `<li>✓ ${course.code} ${course.grade || ''} ${course.credits} cr</li>`;
+                });
+                html += '</ul>';
+            }
+
+            if (category.remaining.length > 0) {
+                html += '<h4>⚠ Remaining Courses:</h4><ul>';
+                category.remaining.forEach(course => {
+                    html += `<li>⚠ ${course.code} ${course.credits} cr</li>`;
+                });
+                html += '</ul>';
+            }
+        });
+
+        resultsDiv.innerHTML = html;
+    </script>
+</body>
+
+</html>

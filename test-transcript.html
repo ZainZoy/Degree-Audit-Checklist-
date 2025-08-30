@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Transcript Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="course-requirements.js"></script>
+</head>
+
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Test Transcript Analyzer</h1>
+
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-4">Quick Test</h2>
+            <button id="testBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Run Test Analysis
+            </button>
+        </div>
+
+        <div id="results" class="bg-white p-6 rounded-lg shadow hidden">
+            <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+            <div id="output"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('testBtn').addEventListener('click', () => {
+            // Sample transcript courses (FCCU format)
+            const sampleCourses = [
+                { code: "COMP-102", name: "Programming I", grade: "C", points: 2.0 },
+                { code: "COMP-111", name: "Programming II", grade: "E", points: 0.0 },
+                { code: "COMP-113", name: "Discrete Mathematics", grade: "B", points: 3.0 },
+                { code: "WRCM-101", name: "Writing and Communication I", grade: "CC", points: 2.0 },
+                { code: "MATH-111", name: "Calculus and Analytical Geometry", grade: "C", points: 2.0 },
+                { code: "UNIV-100", name: "Foundation of University Education", grade: "H", points: 4.0 }
+            ];
+
+            // Test analysis
+            const analysis = analyzeDegreeProgress(sampleCourses, "Computer Science");
+
+            // Display results
+            const output = document.getElementById('output');
+            output.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold">Overall Progress</h3>
+                        <p>Completed: ${analysis.overall.totalCompleted}</p>
+                        <p>Remaining: ${analysis.overall.totalRequired - analysis.overall.totalCompleted}</p>
+                        <p>Progress: ${analysis.overall.progress}%</p>
+                        <p>GPA: ${analysis.overall.gpa}</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold">Categories</h3>
+                        ${Object.entries(analysis.categories).map(([name, data]) => `
+                            <div class="ml-4 mb-2">
+                                <h4 class="font-medium">${name}</h4>
+                                <p class="text-sm text-gray-600">
+                                    Completed: ${data.completed.length}, 
+                                    Remaining: ${data.remaining.length}
+                                </p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold">Sample Courses Found</h3>
+                        ${sampleCourses.map(course => `
+                            <div class="text-sm text-gray-600">
+                                ${course.code} - ${course.name} (${course.grade})
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('results').classList.remove('hidden');
+        });
+    </script>
+</body>
+
+</html>
