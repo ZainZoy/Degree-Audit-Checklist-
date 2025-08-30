@@ -414,6 +414,120 @@
       --accent-color: #ffffff;
       --text-color: #374151;
     }
+
+    /* Cool CGPA Calculator Section Animations */
+    .additional-tools {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .additional-tools::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.6), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
+    }
+
+    .cgpa-button {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateY(0);
+    }
+
+    .cgpa-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .cgpa-button:hover::before {
+      left: 100%;
+    }
+
+    .cgpa-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+    }
+
+    .cgpa-button-alt {
+      position: relative;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+    }
+
+    .cgpa-button-alt:hover {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(34, 197, 94, 0.2);
+    }
+
+    .tools-title {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tools-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .additional-tools:hover .tools-title::after {
+      width: 100%;
+    }
+
+    .calculator-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .cgpa-button:hover .calculator-icon {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .tools-description {
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .additional-tools:hover .tools-description {
+      opacity: 1;
+    }
+
+    /* Subtle glow effect */
+    .additional-tools {
+      animation: subtleGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtleGlow {
+      0% { 
+        box-shadow: 0 0 5px rgba(34, 197, 94, 0.1);
+      }
+      100% { 
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.2), 0 0 30px rgba(34, 197, 94, 0.1);
+      }
+    }
   </style>
 </head>
 
@@ -515,25 +629,26 @@
       <p class="mt-6 sm:mt-8 text-xs text-slate-600">Each link opens the specific checklist PDF in a new tab.</p>
 
       <!-- Additional Tools -->
-      <div class="mt-8 pt-6 border-t border-white/20">
-        <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center">Additional Academic Tools</h4>
+      <div class="additional-tools mt-8 pt-6 border-t border-white/20 rounded-lg p-4">
+        <h4 class="tools-title text-sm font-semibold text-slate-700 mb-4 text-center">Additional Academic Tools</h4>
         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <a href="https://zainzoy.github.io/CGPA-Calculator/" target="_blank"
             onclick="gtag('event', 'cgpa_calculator_click', { 'event_category': 'engagement', 'event_label': 'main_link', 'page_location': 'homepage' });"
-            class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            class="cgpa-button inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium text-sm">
+            <svg class="calculator-icon h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
             CGPA Calculator
           </a>
           <a href="https://cgpa-calculator-lac-nine.vercel.app/" target="_blank"
             onclick="gtag('event', 'cgpa_calculator_click', { 'event_category': 'engagement', 'event_label': 'alternative_link', 'page_location': 'homepage' });"
-            class="inline-flex items-center gap-2 text-green-700 hover:text-green-800 px-3 py-2 rounded-lg border border-green-300 hover:border-green-500 transition-colors text-sm">
+            class="cgpa-button-alt inline-flex items-center gap-2 text-green-700 hover:text-green-800 px-3 py-2 rounded-lg border border-green-300 hover:border-green-500 text-sm">
             Alternative Link
           </a>
         </div>
-        <p class="text-xs text-slate-600 mt-2 text-center">Calculate your CGPA using FCCU's grading system</p>
+        <p class="tools-description text-xs text-slate-600 mt-2 text-center">Calculate your CGPA using FCCU's grading
+          system</p>
       </div>
     </div>
   </div>
